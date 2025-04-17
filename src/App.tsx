@@ -1,9 +1,6 @@
 import { useState, useEffect } from 'react'
 import './App.css'
-
-export type SquareValue = 'X' | 'O' | null;
-export type GameMode = 'pvp' | 'pvc';
-export type Difficulty = 'easy' | 'medium' | 'hard';
+import { type SquareValue, type GameMode, type Difficulty, calculateWinner, findComputerMove } from './gameLogic'
 
 function App() {
   const [squares, setSquares] = useState<SquareValue[]>(Array(9).fill(null));
@@ -15,7 +12,7 @@ function App() {
 
   // Computer's turn logic
   useEffect(() => {
-    if (gameMode === 'pvc' && !xIsNext && !winner && !squares.every(square => square) && gameStarted) {
+    if (gameMode === 'computer' && !xIsNext && !winner && !squares.every(square => square) && gameStarted) {
       const timer = setTimeout(() => {
         const computerMove = findComputerMove(squares, difficulty);
         if (computerMove !== -1) {
@@ -30,7 +27,7 @@ function App() {
   }, [squares, xIsNext, gameMode, winner, difficulty, gameStarted]);
 
   function handleClick(i: number) {
-    if (winner || squares[i] || (gameMode === 'pvc' && !xIsNext)) return;
+    if (winner || squares[i] || (gameMode === 'computer' && !xIsNext)) return;
     
     const newSquares = squares.slice();
     newSquares[i] = xIsNext ? 'X' : 'O';
@@ -46,7 +43,7 @@ function App() {
 
   function startNewGame(mode: GameMode) {
     setGameMode(mode);
-    if (mode === 'pvp') {
+    if (mode === 'player') {
       setGameStarted(true);
     }
     resetGame();
@@ -64,10 +61,10 @@ function App() {
         <h1>Tic Tac Toe</h1>
         <div className="mode-selection">
           <h2>Select Game Mode</h2>
-          <button className="mode-button" onClick={() => startNewGame('pvp')}>
+          <button className="mode-button" onClick={() => startNewGame('player')}>
             Player vs Player
           </button>
-          <button className="mode-button" onClick={() => startNewGame('pvc')}>
+          <button className="mode-button" onClick={() => startNewGame('computer')}>
             Player vs Computer
           </button>
         </div>
@@ -75,7 +72,7 @@ function App() {
     );
   }
 
-  if (gameMode === 'pvc' && !gameStarted) {
+  if (gameMode === 'computer' && !gameStarted) {
     return (
       <div className="game">
         <h1>Tic Tac Toe</h1>
@@ -116,7 +113,7 @@ function App() {
       <div className="game-info">
         <div className="status">{status}</div>
         <div className="mode-indicator">
-          Mode: {gameMode === 'pvp' ? 'Player vs Player' : `Player vs Computer (${difficulty})`}
+          Mode: {gameMode === 'player' ? 'Player vs Player' : `Player vs Computer (${difficulty})`}
         </div>
       </div>
       <div className="board">
@@ -141,124 +138,6 @@ function App() {
       </div>
     </div>
   );
-}
-
-export function calculateWinner(squares: SquareValue[]): SquareValue {
-  const lines = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6],
-  ];
-
-  for (const [a, b, c] of lines) {
-    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
-    }
-  }
-  return null;
-}
-
-// Computer AI logic with different difficulty levels
-export function findComputerMove(squares: SquareValue[], difficulty: Difficulty): number {
-  switch (difficulty) {
-    case 'easy':
-      return findEasyMove(squares);
-    case 'medium':
-      return findMediumMove(squares);
-    case 'hard':
-      return findHardMove(squares);
-  }
-}
-
-export function findEasyMove(squares: SquareValue[]): number {
-  // Just pick a random available move
-  const availableSpaces = squares.map((square, i) => !square ? i : -1).filter(i => i !== -1);
-  if (availableSpaces.length > 0) {
-    return availableSpaces[Math.floor(Math.random() * availableSpaces.length)];
-  }
-  return -1;
-}
-
-export function findMediumMove(squares: SquareValue[]): number {
-  // Check for winning move
-  for (let i = 0; i < 9; i++) {
-    if (!squares[i]) {
-      const newSquares = squares.slice();
-      newSquares[i] = 'O';
-      if (calculateWinner(newSquares) === 'O') {
-        return i;
-      }
-    }
-  }
-
-  // Block opponent's winning move
-  for (let i = 0; i < 9; i++) {
-    if (!squares[i]) {
-      const newSquares = squares.slice();
-      newSquares[i] = 'X';
-      if (calculateWinner(newSquares) === 'X') {
-        return i;
-      }
-    }
-  }
-
-  // Take center if available
-  if (!squares[4]) return 4;
-
-  // Take any available space
-  const availableSpaces = squares.map((square, i) => !square ? i : -1).filter(i => i !== -1);
-  if (availableSpaces.length > 0) {
-    return availableSpaces[Math.floor(Math.random() * availableSpaces.length)];
-  }
-
-  return -1;
-}
-
-export function findHardMove(squares: SquareValue[]): number {
-  // Check for winning move
-  for (let i = 0; i < 9; i++) {
-    if (!squares[i]) {
-      const newSquares = squares.slice();
-      newSquares[i] = 'O';
-      if (calculateWinner(newSquares) === 'O') {
-        return i;
-      }
-    }
-  }
-
-  // Block opponent's winning move
-  for (let i = 0; i < 9; i++) {
-    if (!squares[i]) {
-      const newSquares = squares.slice();
-      newSquares[i] = 'X';
-      if (calculateWinner(newSquares) === 'X') {
-        return i;
-      }
-    }
-  }
-
-  // Take center if available
-  if (!squares[4]) return 4;
-
-  // Take corners if available
-  const corners = [0, 2, 6, 8];
-  const availableCorners = corners.filter(i => !squares[i]);
-  if (availableCorners.length > 0) {
-    return availableCorners[Math.floor(Math.random() * availableCorners.length)];
-  }
-
-  // Take any available space
-  const availableSpaces = squares.map((square, i) => !square ? i : -1).filter(i => i !== -1);
-  if (availableSpaces.length > 0) {
-    return availableSpaces[Math.floor(Math.random() * availableSpaces.length)];
-  }
-
-  return -1;
 }
 
 export default App
