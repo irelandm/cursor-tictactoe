@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 
-type SquareValue = 'X' | 'O' | null;
-type GameMode = 'pvp' | 'pvc';
-type Difficulty = 'easy' | 'medium' | 'hard';
+export type SquareValue = 'X' | 'O' | null;
+export type GameMode = 'pvp' | 'pvc';
+export type Difficulty = 'easy' | 'medium' | 'hard';
 
 function App() {
   const [squares, setSquares] = useState<SquareValue[]>(Array(9).fill(null));
@@ -143,7 +143,7 @@ function App() {
   );
 }
 
-function calculateWinner(squares: SquareValue[]): SquareValue {
+export function calculateWinner(squares: SquareValue[]): SquareValue {
   const lines = [
     [0, 1, 2],
     [3, 4, 5],
@@ -164,7 +164,7 @@ function calculateWinner(squares: SquareValue[]): SquareValue {
 }
 
 // Computer AI logic with different difficulty levels
-function findComputerMove(squares: SquareValue[], difficulty: Difficulty): number {
+export function findComputerMove(squares: SquareValue[], difficulty: Difficulty): number {
   switch (difficulty) {
     case 'easy':
       return findEasyMove(squares);
@@ -175,7 +175,7 @@ function findComputerMove(squares: SquareValue[], difficulty: Difficulty): numbe
   }
 }
 
-function findEasyMove(squares: SquareValue[]): number {
+export function findEasyMove(squares: SquareValue[]): number {
   // Just pick a random available move
   const availableSpaces = squares.map((square, i) => !square ? i : -1).filter(i => i !== -1);
   if (availableSpaces.length > 0) {
@@ -184,7 +184,7 @@ function findEasyMove(squares: SquareValue[]): number {
   return -1;
 }
 
-function findMediumMove(squares: SquareValue[]): number {
+export function findMediumMove(squares: SquareValue[]): number {
   // Check for winning move
   for (let i = 0; i < 9; i++) {
     if (!squares[i]) {
@@ -219,7 +219,7 @@ function findMediumMove(squares: SquareValue[]): number {
   return -1;
 }
 
-function findHardMove(squares: SquareValue[]): number {
+export function findHardMove(squares: SquareValue[]): number {
   // Check for winning move
   for (let i = 0; i < 9; i++) {
     if (!squares[i]) {
