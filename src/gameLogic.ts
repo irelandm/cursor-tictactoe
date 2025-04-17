@@ -2,7 +2,12 @@ export type SquareValue = 'X' | 'O' | null;
 export type GameMode = 'player' | 'computer';
 export type Difficulty = 'easy' | 'medium' | 'hard';
 
-export function calculateWinner(squares: SquareValue[]): SquareValue {
+export type WinnerInfo = {
+  winner: SquareValue;
+  line: number[] | null;
+};
+
+export function calculateWinner(squares: SquareValue[]): WinnerInfo {
   const lines = [
     [0, 1, 2],
     [3, 4, 5],
@@ -14,12 +19,19 @@ export function calculateWinner(squares: SquareValue[]): SquareValue {
     [2, 4, 6],
   ];
 
-  for (const [a, b, c] of lines) {
+  for (const line of lines) {
+    const [a, b, c] = line;
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
+      return {
+        winner: squares[a],
+        line: line
+      };
     }
   }
-  return null;
+  return {
+    winner: null,
+    line: null
+  };
 }
 
 // Computer AI logic with different difficulty levels
@@ -47,7 +59,7 @@ export function findMediumMove(squares: SquareValue[]): number {
     if (squares[i] === null) {
       const newSquares = [...squares];
       newSquares[i] = 'O';
-      if (calculateWinner(newSquares) === 'O') {
+      if (calculateWinner(newSquares).winner === 'O') {
         return i;
       }
     }
@@ -58,7 +70,7 @@ export function findMediumMove(squares: SquareValue[]): number {
     if (squares[i] === null) {
       const newSquares = [...squares];
       newSquares[i] = 'X';
-      if (calculateWinner(newSquares) === 'X') {
+      if (calculateWinner(newSquares).winner === 'X') {
         return i;
       }
     }
@@ -92,7 +104,7 @@ export function findHardMove(squares: SquareValue[]): number {
     if (squares[i] === null) {
       const newSquares = [...squares];
       newSquares[i] = 'O';
-      if (calculateWinner(newSquares) === 'O') {
+      if (calculateWinner(newSquares).winner === 'O') {
         return i;
       }
     }
@@ -103,7 +115,7 @@ export function findHardMove(squares: SquareValue[]): number {
     if (squares[i] === null) {
       const newSquares = [...squares];
       newSquares[i] = 'X';
-      if (calculateWinner(newSquares) === 'X') {
+      if (calculateWinner(newSquares).winner === 'X') {
         return i;
       }
     }

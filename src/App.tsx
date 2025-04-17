@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import './App.css'
-import { type SquareValue, type GameMode, type Difficulty, calculateWinner, findComputerMove } from './gameLogic'
+import { type SquareValue, type GameMode, type Difficulty, calculateWinner, findComputerMove, type WinnerInfo } from './gameLogic'
 
 function App() {
   const [squares, setSquares] = useState<SquareValue[]>(Array(9).fill(null));
@@ -8,11 +8,11 @@ function App() {
   const [gameMode, setGameMode] = useState<GameMode | null>(null);
   const [difficulty, setDifficulty] = useState<Difficulty>('medium');
   const [gameStarted, setGameStarted] = useState(false);
-  const winner = calculateWinner(squares);
+  const winInfo = calculateWinner(squares);
 
   // Computer's turn logic
   useEffect(() => {
-    if (gameMode === 'computer' && !xIsNext && !winner && !squares.every(square => square) && gameStarted) {
+    if (gameMode === 'computer' && !xIsNext && !winInfo.winner && !squares.every(square => square) && gameStarted) {
       const timer = setTimeout(() => {
         const computerMove = findComputerMove(squares, difficulty);
         if (computerMove !== -1) {
@@ -24,10 +24,10 @@ function App() {
       }, 500);
       return () => clearTimeout(timer);
     }
-  }, [squares, xIsNext, gameMode, winner, difficulty, gameStarted]);
+  }, [squares, xIsNext, gameMode, winInfo.winner, difficulty, gameStarted]);
 
   function handleClick(i: number) {
-    if (winner || squares[i] || (gameMode === 'computer' && !xIsNext)) return;
+    if (winInfo.winner || squares[i] || (gameMode === 'computer' && !xIsNext)) return;
     
     const newSquares = squares.slice();
     newSquares[i] = xIsNext ? 'X' : 'O';
@@ -49,8 +49,8 @@ function App() {
     resetGame();
   }
 
-  const status = winner 
-    ? `Winner: ${winner}`
+  const status = winInfo.winner 
+    ? `Winner: ${winInfo.winner}`
     : squares.every(square => square) 
       ? "Game Over - It's a draw!"
       : `Next player: ${xIsNext ? 'X' : 'O'}`;
@@ -120,7 +120,7 @@ function App() {
         {squares.map((square, i) => (
           <button
             key={i}
-            className="square"
+            className={`square ${winInfo.line?.includes(i) ? 'winning' : ''}`}
             onClick={() => handleClick(i)}
             data-value={square}
           >

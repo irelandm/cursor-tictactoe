@@ -1,4 +1,4 @@
-import { calculateWinner, findComputerMove, findEasyMove, findMediumMove, findHardMove, type SquareValue } from '../gameLogic';
+import { calculateWinner, findComputerMove, findEasyMove, findMediumMove, findHardMove, type SquareValue, type WinnerInfo } from '../gameLogic';
 
 // Helper function to create a properly typed board
 const createBoard = (squares: (SquareValue)[]): SquareValue[] => squares;
@@ -6,27 +6,37 @@ const createBoard = (squares: (SquareValue)[]): SquareValue[] => squares;
 describe('calculateWinner', () => {
   it('should return null for an empty board', () => {
     const squares = createBoard(Array(9).fill(null));
-    expect(calculateWinner(squares)).toBeNull();
+    const result = calculateWinner(squares);
+    expect(result.winner).toBeNull();
+    expect(result.line).toBeNull();
   });
 
   it('should detect horizontal wins', () => {
     const squares = createBoard(['X', 'X', 'X', null, null, null, null, null, null]);
-    expect(calculateWinner(squares)).toBe('X');
+    const result = calculateWinner(squares);
+    expect(result.winner).toBe('X');
+    expect(result.line).toEqual([0, 1, 2]);
   });
 
   it('should detect vertical wins', () => {
     const squares = createBoard(['O', null, null, 'O', null, null, 'O', null, null]);
-    expect(calculateWinner(squares)).toBe('O');
+    const result = calculateWinner(squares);
+    expect(result.winner).toBe('O');
+    expect(result.line).toEqual([0, 3, 6]);
   });
 
   it('should detect diagonal wins', () => {
     const squares = createBoard(['X', null, null, null, 'X', null, null, null, 'X']);
-    expect(calculateWinner(squares)).toBe('X');
+    const result = calculateWinner(squares);
+    expect(result.winner).toBe('X');
+    expect(result.line).toEqual([0, 4, 8]);
   });
 
   it('should return null for a draw', () => {
     const squares = createBoard(['X', 'O', 'X', 'X', 'O', 'O', 'O', 'X', 'X']);
-    expect(calculateWinner(squares)).toBeNull();
+    const result = calculateWinner(squares);
+    expect(result.winner).toBeNull();
+    expect(result.line).toBeNull();
   });
 });
 
