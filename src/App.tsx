@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import './App.css'
-import { type SquareValue, type GameMode, type Difficulty, calculateWinner, findComputerMove, type WinnerInfo } from './gameLogic'
+import { type SquareValue, type GameMode, type Difficulty, calculateWinner, findComputerMove } from './gameLogic'
 
 function App() {
   const [squares, setSquares] = useState<SquareValue[]>(Array(9).fill(null));

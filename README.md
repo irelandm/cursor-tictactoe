@@ -18,15 +18,38 @@ A modern implementation of the classic Tic Tac Toe game built with React, TypeSc
 
 ## Getting Started
 
-### Running the App
+### Prerequisites
 
-To start the development server:
+- Node.js (v14 or higher)
+- npm (v6 or higher)
+
+### Installation
+
+1. Clone the repository
+2. Install dependencies:
+```bash
+npm install
+```
+
+### Running the Development Server
 
 ```bash
 npm run dev
 ```
 
 This will start the development server at `http://localhost:5173`
+
+### Running Tests
+
+```bash
+npm test
+```
+
+### Building for Production
+
+```bash
+npm run build
+```
 
 ### Linting
 
@@ -41,3 +64,15 @@ To automatically fix linting issues:
 ```bash
 npm run lint:fix
 ```
+
+## Game Modes
+
+- **Player vs Player**: Play against another person
+- **Player vs Computer**: Play against the AI with three difficulty levels:
+  - Easy: Makes random moves
+  - Medium: Makes strategic moves and blocks winning moves
+  - Hard: Uses advanced strategy to maximize winning chances
+
+## License
+
+This project is licensed under the MIT License.

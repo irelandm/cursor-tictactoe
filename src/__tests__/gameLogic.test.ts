@@ -1,4 +1,4 @@
-import { calculateWinner, findComputerMove, findEasyMove, findMediumMove, findHardMove, type SquareValue, type WinnerInfo } from '../gameLogic';
+import { calculateWinner, findComputerMove, findEasyMove, findMediumMove, findHardMove, type SquareValue } from '../gameLogic';
 
 // Helper function to create a properly typed board
 const createBoard = (squares: (SquareValue)[]): SquareValue[] => squares;

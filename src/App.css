@@ -126,6 +126,7 @@ h2 {
   padding: 0;
   cursor: pointer;
   transition: all 0.2s;
+  outline: none; /* Prevent default focus outline */
 }
 
 .square.winning {
@@ -133,6 +134,7 @@ h2 {
   border-color: #2e7d32;
   color: #4caf50;
   animation: pulse 1s infinite;
+  cursor: default;
 }
 
 @keyframes pulse {
@@ -153,24 +155,30 @@ h2 {
   border-color: #404040;
 }
 
-/* Disable hover effects for all squares when game is over */
+/* Disable all interactions for squares when game is over */
 .square[data-value],
 .square.winning {
   pointer-events: none;
 }
 
-.square:disabled {
-  cursor: not-allowed;
-  background-color: #2d2d2d;
+/* Prevent focus/active states on squares after game is over */
+.square:focus {
+  outline: none;
+}
+
+.square:active {
+  border-color: #404040;
 }
 
 /* Add styles for X and O */
 .square[data-value="X"] {
   color: #ff6b6b; /* Lighter red for X */
+  cursor: default;
 }
 
 .square[data-value="O"] {
   color: #4dabf7; /* Lighter blue for O */
+  cursor: default;
 }
 
 .controls {
