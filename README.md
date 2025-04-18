@@ -4,10 +4,17 @@ A modern implementation of the classic Tic Tac Toe game built with React, TypeSc
 
 ## Features
 
-- Classic Tic Tac Toe gameplay
+- Classic Tic Tac Toe gameplay with multiple game modes:
+  - **Player vs Player**: Play against another person
+  - **Player vs Computer**: Play against the AI with three difficulty levels:
+    - Easy: Makes random moves
+    - Medium: Makes strategic moves and blocks winning moves
+    - Hard: Uses advanced strategy to maximize winning chances
 - Responsive design that works on all devices
 - Modern React + TypeScript implementation
 - Fast development with Vite's HMR
+- Visual feedback for winning moves
+- Dark mode interface
 
 ## Tech Stack
 
@@ -64,14 +71,6 @@ To automatically fix linting issues:
 ```bash
 npm run lint:fix
 ```
-
-## Game Modes
-
-- **Player vs Player**: Play against another person
-- **Player vs Computer**: Play against the AI with three difficulty levels:
-  - Easy: Makes random moves
-  - Medium: Makes strategic moves and blocks winning moves
-  - Hard: Uses advanced strategy to maximize winning chances
 
 ## License
 
